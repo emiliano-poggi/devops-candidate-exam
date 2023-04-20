@@ -28,7 +28,7 @@ pipeline{
         stage("Invoke Lambda"){
             steps{
                 echo "Invoking your AWS Lambda"
-                sh 'aws lambda invoke --function-name devopsLambda --log-type Tail response.txt --region ap-south-1'
+                sh 'aws lambda invoke --function-name devopsLambda --log-type Tail response.txt'
             }
         }
     }
