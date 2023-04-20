@@ -12,7 +12,7 @@ resource "aws_route_table" "nat_gateway_route_table" {
 }
 
 # Create a route to send all traffic to the NAT Gateway
-route {
+resource "aws_route" "nat_gateway_route" {
   route_table_id = aws_route_table.nat_gateway_route_table.id
   cidr_block = "0.0.0.0/0"
   nat_gateway_id = data.aws_nat_gateway.nat.id
