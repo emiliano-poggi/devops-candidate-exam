@@ -1,23 +1,22 @@
-resource "aws_vpc" "devopsexam_vpc" {
+resource "aws_vpc" "devopsVpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "devopsexam-vpc"
+    Name = "devopsVpc"
   }
 }
 
-resource "aws_subnet" "devopsexam_subnet" {
-  vpc_id     = aws_vpc.devopsexam_vpc.id
+resource "aws_subnet" "devopsSubnet" {
+  vpc_id     = aws_vpc.devopsVpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ap-south-1a"
-
   tags = {
-    Name = "devopsexam-subnet"
+    Name = "devopsSubnet"
   }
 }
 
-resource "aws_security_group" "devopsexam_security_group" {
-  name_prefix = "devopsexam-security-group"
+resource "aws_security_group" "devopsSecurityGroup" {
+  name_prefix = "devopsSecurityGroup"
 
   ingress {
     from_port   = 0
@@ -33,67 +32,28 @@ resource "aws_security_group" "devopsexam_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_id = aws_vpc.devopsexam_vpc.id
+  vpc_id = aws_vpc.devopsVpc.id
 }
 
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Allow"
-        Principal = { Service = "lambda.amazonaws.com" }
-        Action    = "sts:AssumeRole"
-      }
-    ]
-  })
+resource "aws_iam_role" "lambdaRole" {
+  name = "lambdaRole"
 }
 
-
-
-data "archive_file" "lambda_zip" {
+data "archive_file" "lambdaZip" {
   type        = "zip"
-  output_path = "${path.module}/devopsexam_lambda.zip"
-  source_dir  = "${path.module}"
-  excludes    = [
-    "**/*.tf",
-    "**/*.tfvars",
-    ".terraform/*",
-    ".git/*",
-    ".DS_Store",
-    "*.zip",
-    "*.tar.gz",
-    "*.tar.bz2",
-    "*.tar",
-    "*.gz",
-    "*.bz2",
-    "*.rar",
-    "*.7z",
-    "*.tar.xz",
-    "devopsexam_lambda.py", # Exclude devopsexam_lambda.py from the zip file
-  ]
+  output_path = "${path.module}/devopsLambda.py.zip"
+  source_file  = "${path.module}/devops_lambda.py"
 }
 
-resource "aws_lambda_function" "devopsexam_lambda" {
-  function_name    = "devopsexam_lambda"
-  role             = aws_iam_role.lambda_role.arn
-  handler          = "devopsexam_lambda.handler"
+resource "aws_lambda_function" "devopsLambda" {
+  function_name    = "devopsLambda"
+  role             = aws_iam_role.lambdaRole.arn
+  handler          = "devopsLambda.handler"
   runtime          = "python3.8"
-  filename         = "${path.module}/devopsexam_lambda.zip"
+  filename         = "${path.module}/devopsLambda.py.zip"
+  source_code_hash = data.archive_file.lambdaZip.output_base64sha256
   vpc_config {
-    subnet_ids = [aws_subnet.devopsexam_subnet.id]
-    security_group_ids = [aws_security_group.devopsexam_security_group.id]
-  }
-}
-
-locals {
-  lambda_code = file("${path.module}/devopsexam_lambda.py")
-}
-
-resource "null_resource" "devopsexam_lambda" {
-  triggers = {
-    lambda_zip = data.archive_file.lambda_zip.output_path
+    subnet_ids = [aws_subnet.devopsSubnet.id]
+    security_group_ids = [aws_security_group.devopsSecurityGroup.id]
   }
 }
