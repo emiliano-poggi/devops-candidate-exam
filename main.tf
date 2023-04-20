@@ -35,25 +35,8 @@ resource "aws_security_group" "devopsSecurityGroup" {
   vpc_id = aws_vpc.devopsVpc.id
 }
 
-resource "aws_iam_role" "lambdaRole" {
-  name = "lambdaRole"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "lambdaRole_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.lambdaRole.name
+data "aws_iam_role" "lambdaRole" {
+  name = "DevOps-Candidate-Lambda-Role"
 }
 
 
