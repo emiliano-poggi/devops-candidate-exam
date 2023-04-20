@@ -48,7 +48,7 @@ data "archive_file" "lambdaZip" {
 
 resource "aws_lambda_function" "devopsLambda" {
   function_name    = "devopsLambda"
-  role             = aws_iam_role.lambdaRole.arn
+  role             = data.aws_iam_role.lambdaRole.arn
   handler          = "devopsLambda.handler"
   runtime          = "python3.8"
   filename         = "${path.module}/devopsLambda.py.zip"
