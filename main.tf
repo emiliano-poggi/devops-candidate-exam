@@ -1,5 +1,5 @@
 resource "aws_vpc" "devopsexam_vpc" {
-  cidr_block = "10.0.0.0/12"
+  cidr_block = "10.0.0.0/16"
 
   tags = {
     Name = "devopsexam-vpc"
