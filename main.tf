@@ -23,7 +23,7 @@ resource "aws_security_group" "devopsSecurityGroup" {
 data "archive_file" "lambdaZip" {
   type        = "zip"
   output_path = "${path.module}/devopsLambda.py.zip"
-  source_file  = "${path.module}/devops_lambda.py"
+  source_file  = "${path.module}/devopsLambda.py"
 }
 
 resource "aws_lambda_function" "devopsLambda" {
