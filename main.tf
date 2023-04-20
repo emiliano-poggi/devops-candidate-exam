@@ -36,6 +36,22 @@ resource "aws_security_group" "devopsexam_security_group" {
   vpc_id = aws_vpc.devopsexam_vpc.id
 }
 
+resource "aws_iam_role" "lambda" {
+  name = "lambda-role"
+
+  assume_role_policy = jsonencode({
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = { Service = "lambda.amazonaws.com" }
+        Action    = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
   output_path = "${path.module}/devopsexam_lambda.zip"
