@@ -7,6 +7,24 @@ resource "aws_subnet" "devopsSubnet" {
   }
 }
 
+resource "aws_route_table" "nat_gateway_route_table" {
+  vpc_id = data.aws_vpc.vpc.id
+
+  # Create a route to send all traffic to the NAT Gateway
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = data.aws_nat_gateway.nat.id
+  }
+}
+
+# Associate the route table with the subnet(s) that need to use the NAT Gateway
+resource "aws_route_table_association" "nat_gateway_route_table_association" {
+  subnet_id = aws_subnet.devopsSubnet.id
+  route_table_id = aws_route_table.nat_gateway_route_table.id
+}
+
+
+
 resource "aws_security_group" "devopsSecurityGroup" {
   name_prefix = "devopsSecurityGroup"
 
