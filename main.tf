@@ -36,7 +36,7 @@ resource "aws_security_group" "devopsexam_security_group" {
   vpc_id = aws_vpc.devopsexam_vpc.id
 }
 
-resource "aws_iam_role" "lambda" {
+resource "aws_iam_role" "lambda_role" {
   name = "lambda-role"
 
   assume_role_policy = jsonencode({
