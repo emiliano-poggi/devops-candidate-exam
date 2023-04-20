@@ -42,7 +42,7 @@ resource "aws_lambda_function" "devopsexam_lambda" {
   handler          = "devopsexam_lambda.handler"
   runtime          = "python3.8"
   filename         = "devopsexam_lambda.zip"
-  source_code_hash = filebase64sha256("lambda.zip")
+  source_code_hash = filebase64sha256("devopsexam_lambda.zip")
   vpc_config {
     subnet_ids = [aws_subnet.devopsexam_subnet.id]
     security_group_ids = [aws_security_group.devopsexam_security_group.id]
