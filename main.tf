@@ -35,3 +35,16 @@ resource "aws_security_group" "devopsexam_security_group" {
 
   vpc_id = aws_vpc.devopsexam.id
 }
+
+resource "aws_lambda_function" "devopsexam_lambda" {
+  function_name    = "devopsexam_lambda"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "lambda_function.devopsexam_handler"
+  runtime          = "python3.8"
+  filename         = "lambda.zip"
+  source_code_hash = filebase64sha256("lambda.zip")
+  vpc_config {
+    subnet_ids = ["${aws_subnet.devopsexam_subnet.id}"]
+    security_group_ids = ["${aws_security_group.devopsexam_security_group.id}"]
+  }
+}
