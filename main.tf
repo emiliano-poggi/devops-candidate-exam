@@ -33,7 +33,7 @@ resource "aws_security_group" "devopsexam_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_id = aws_vpc.devopsexam.id
+  vpc_id = aws_vpc.devopsexam_vpc.id
 }
 
 data "archive_file" "lambda_zip" {
