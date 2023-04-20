@@ -1,13 +1,5 @@
-resource "aws_vpc" "devopsVpc" {
-  cidr_block = "10.0.0.0/16"
-
-  tags = {
-    Name = "devopsVpc"
-  }
-}
-
 resource "aws_subnet" "devopsSubnet" {
-  vpc_id     = aws_vpc.devopsVpc.id
+  vpc_id     = data.aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ap-south-1a"
   tags = {
@@ -32,13 +24,8 @@ resource "aws_security_group" "devopsSecurityGroup" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_id = aws_vpc.devopsVpc.id
+  vpc_id = data.aws_vpc.vpc.id
 }
-
-data "aws_iam_role" "lambdaRole" {
-  name = "DevOps-Candidate-Lambda-Role"
-}
-
 
 data "archive_file" "lambdaZip" {
   type        = "zip"
@@ -48,7 +35,7 @@ data "archive_file" "lambdaZip" {
 
 resource "aws_lambda_function" "devopsLambda" {
   function_name    = "devopsLambda"
-  role             = data.aws_iam_role.lambdaRole.arn
+  role             = data.aws_iam_role.lambda.arn
   handler          = "devopsLambda.handler"
   runtime          = "python3.8"
   filename         = "${path.module}/devopsLambda.py.zip"
