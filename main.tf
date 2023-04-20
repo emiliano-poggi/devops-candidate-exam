@@ -1,6 +1,6 @@
 resource "aws_subnet" "devopsSubnet" {
   vpc_id     = data.aws_vpc.vpc.id
-  cidr_block = "10.0.12.0/24"
+  cidr_block = "10.0.82.0/24"
   availability_zone = "ap-south-1a"
   tags = {
     Name = "devopsSubnet"
