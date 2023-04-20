@@ -26,7 +26,7 @@ pipeline{
         stage("Invoke Lambda"){
             steps{
                 echo "Invoking your AWS Lambda"
-                sh 'aws lambda invoke --function-name devopsexam_lambda --log-type Tail
+                sh 'aws lambda invoke --function-name devopsexam_lambda --log-type Tail'
             }
         }
     }
