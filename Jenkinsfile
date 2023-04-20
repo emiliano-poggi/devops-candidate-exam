@@ -5,7 +5,7 @@ pipeline{
             steps{
                 echo "Executing Terraform Init"
                 echo "test"
-                sh 'terraform init -migrate-state'
+                sh 'terraform init'
             }
         }
         stage("TF Validate"){
@@ -16,11 +16,13 @@ pipeline{
         stage("TF Plan"){
             steps{
                 echo "Executing Terraform Plan"
+                sh 'terraform plan'
             }
         }
         stage("TF Apply"){
             steps{
                 echo "Executing Terraform Apply"
+                sh 'terraform apply'
             }
         }
         stage("Invoke Lambda"){
