@@ -26,9 +26,7 @@ pipeline{
         stage("Invoke Lambda"){
             steps{
                 echo "Invoking your AWS Lambda"
-                sh 'aws configure get region'
-                sh 'aws lambda list-functions'
-                sh 'aws lambda invoke --function-name devopsexam_lambda --log-type Tail response.txt'
+                sh 'aws lambda invoke --function-name devopsexam_lambda --log-type Tail response.txt --region ap-south-1'
             }
         }
     }
