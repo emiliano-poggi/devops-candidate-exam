@@ -1,7 +1,7 @@
 import json
 import urllib.request
 
-def devopsexam_handler(event, context):
+def handler(event, context):
     url = 'https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data'
     data = {
         "subnet_id": "??",
